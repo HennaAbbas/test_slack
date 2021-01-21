@@ -36,47 +36,57 @@
 
 version: 2.1
 orbs:
-    slack: circleci/slack@4.0
+    slack: circleci/slack@4.2.0
+    
+commands: 
+notify_slack_on_failure: &notify_slack_on_failure
+  context:
+    - SLACK_SECRETS
+  post-steps:
+    - slack/notify:
+        branch_pattern: master       # team-engineering-deploys
+        event: always                 # only on fail
+        template: basic_fail_1
    
 jobs:
   my_job:
-    parameters:
-      username:
-        description: "name of username"
-        default: $CIRCLE_USERNAME
-        type: string  
+#     parameters:
+#       username:
+#         description: "name of username"
+#         default: $CIRCLE_USERNAME
+#         type: string  
     docker:
       - image: circleci/node
     steps:
       - checkout
-      - run: wqr
       - run: echo $SLACK_DEFAULT_CHANNEL
-      - slack/notify:
-#          template: basic_fail_1
-          event: always
-          mentions: '@henna'
-          custom: |
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "plain_text",
-                        "text": "$CIRCLE_USERNAME, $CIRCLE_BUILD_URL, $CIRCLE_SHA1, << parameters.username >>",
-                        "emoji": true
-                      }
-                    ]
-                  }
-                ]
-              }        
+#       - slack/notify:
+# #          template: basic_fail_1
+#           event: always
+#           mentions: '@henna'
+#           custom: |
+#               {
+#                 "blocks": [
+#                   {
+#                     "type": "section",
+#                     "fields": [
+#                       {
+#                         "type": "plain_text",
+#                         "text": "$CIRCLE_USERNAME, $CIRCLE_BUILD_URL, $CIRCLE_SHA1, << parameters.username >>",
+#                         "emoji": true
+#                       }
+#                     ]
+#                   }
+#                 ]
+#               }        
             
 workflows:
   my_workflow:
     jobs:
-      - my_job:  
-          context:
-            - SLACK_SECRETS
+      - my_job
+          <<: *notify_slack_on_failure      
+#           context:
+#             - SLACK_SECRETS
       - slack/on-hold:
           name: Notify Approval
           context:
