@@ -44,7 +44,7 @@ notify_slack_on_failure: &notify_slack_on_failure
     - SLACK_SECRETS
   post-steps:
     - slack/notify:
-        branch_pattern: master       # team-engineering-deploys
+        branch_pattern: main       # team-engineering-deploys
         event: always                 # only on fail
         template: basic_fail_1
    
