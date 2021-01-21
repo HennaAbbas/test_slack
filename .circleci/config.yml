@@ -83,7 +83,7 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      - my_job
+      - my_job:
           <<: *notify_slack_on_failure      
 #           context:
 #             - SLACK_SECRETS
