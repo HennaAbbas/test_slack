@@ -70,16 +70,16 @@ workflows:
           context:
             - SLACK_SECRETS          
           #test
-  nightly:
-    triggers:
-      - schedule:
-          cron: "* * * * *"
-          filters:
-            branches:
-              only:
-                - master
-                - beta
-    jobs:
-      - my_job          
+#   nightly:
+#     triggers:
+#       - schedule:
+#           cron: "* * * * *"
+#           filters:
+#             branches:
+#               only:
+#                 - master
+#                 - beta
+#     jobs:
+#       - my_job          
 
          
