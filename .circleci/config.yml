@@ -36,7 +36,7 @@
 
 version: 2.1
 orbs:
-    slack: circleci/slack@4.2.0
+    slack: circleci/slack@4.1
     
 commands: 
 notify_slack_on_failure: &notify_slack_on_failure
@@ -49,36 +49,14 @@ notify_slack_on_failure: &notify_slack_on_failure
         template: basic_fail_1
    
 jobs:
-  my_job:
-#     parameters:
-#       username:
-#         description: "name of username"
-#         default: $CIRCLE_USERNAME
-#         type: string  
+  my_job:  
     docker:
       - image: circleci/node
     steps:
       - checkout
       - run: echo $SLACK_DEFAULT_CHANNEL
-#       - slack/notify:
-# #          template: basic_fail_1
-#           event: always
-#           mentions: '@henna'
-#           custom: |
-#               {
-#                 "blocks": [
-#                   {
-#                     "type": "section",
-#                     "fields": [
-#                       {
-#                         "type": "plain_text",
-#                         "text": "$CIRCLE_USERNAME, $CIRCLE_BUILD_URL, $CIRCLE_SHA1, << parameters.username >>",
-#                         "emoji": true
-#                       }
-#                     ]
-#                   }
-#                 ]
-#               }        
+      - slack/notify
+     
             
 workflows:
   my_workflow:
@@ -92,5 +70,16 @@ workflows:
           context:
             - SLACK_SECRETS          
           #test
+  nightly:
+    triggers:
+      - schedule:
+          cron: "* * * * *"
+          filters:
+            branches:
+              only:
+                - master
+                - beta
+    jobs:
+      - my_job          
 
          
