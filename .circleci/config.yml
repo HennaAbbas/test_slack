@@ -13,6 +13,6 @@ workflows:
   send-notification:
     jobs:
       - first_job:
-          context: SLACK_SECRETS
+          context: slack-secrets
 
          
