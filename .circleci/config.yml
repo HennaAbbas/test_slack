@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.1
 jobs:
-  notify:
+  first_job:
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -12,7 +12,7 @@ jobs:
 workflows:
   send-notification:
     jobs:
-      - notify:
+      - first_job:
           context: slack-secrets
 
          
