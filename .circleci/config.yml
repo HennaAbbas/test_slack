@@ -4,7 +4,7 @@ orbs:
 jobs:
   notify:
     docker:
-      - image: cimg/node:lts
+      - image: cimg/node@sha256:157f3cf0f19d49187d0e1c31984472e3d2f4fe4f3642199ebf8d7845441fedb5
     steps:
       - slack/notify:
           template: basic_success_1
