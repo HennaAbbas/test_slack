@@ -11,23 +11,84 @@ jobs:
 
       - run: echo $SLACK_DEFAULT_CHANNEL
       - hello-world/hello
-      - slack/notify:
-          custom: |
-            {
-              "blocks": [
+#       - slack/notify:
+#           custom: |
+#             {
+#               "blocks": [
+#                 {
+#                   "type": "section",
+#                   "fields": [
+#                     {
+#                       "type": "plain_text",
+#                       "text": "*This is a text notification*",
+#                       "emoji": true
+#                     }
+#                   ]
+#                 }
+#               ]
+#             }
+        - slack/notify:
+            custom: |
                 {
-                  "type": "section",
-                  "fields": [
+                  "blocks": [
                     {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "plain_text",
+                          "text": "Deployed ${CIRCLE_PROJECT_REPONAME} to << parameters.environment >>.",
+                          "emoji": true
+                        }
+                      ]
+                    },
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "View Job"
+                          },
+                          "url": "${CIRCLE_BUILD_URL}"
+                        }
+                      ]
                     }
                   ]
-                }
-              ]
-            }
-          event: always 
+                } 
+                
+                
+                
+                
+                
+#           event: always 
+#                     - slack/notify:
+#                         custom: |
+#                             {
+#                               "blocks": [
+#                                 {
+#                                   "type": "section",
+#                                   "fields": [
+#                                     {
+#                                       "type": "plain_text",
+#                                       "text": "Deployed ${CIRCLE_PROJECT_REPONAME} to << parameters.environment >>.",
+#                                       "emoji": true
+#                                     }
+#                                   ]
+#                                 },
+#                                   "type": "actions",
+#                                   "elements": [
+#                                     {
+#                                       "type": "button",
+#                                       "text": {
+#                                         "type": "plain_text",
+#                                         "text": "View Job"
+#                                       },
+#                                       "url": "${CIRCLE_BUILD_URL}"
+#                                     }
+#                                   ]
+#                                 }
+#                               ]
+#                             }          
           
           
           
