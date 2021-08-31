@@ -11,52 +11,37 @@ jobs:
 
       - run: echo $SLACK_DEFAULT_CHANNEL
       - hello-world/hello
-#       - slack/notify:
-#           custom: |
-#             {
-#               "blocks": [
-#                 {
-#                   "type": "section",
-#                   "fields": [
-#                     {
-#                       "type": "plain_text",
-#                       "text": "*This is a text notification*",
-#                       "emoji": true
-#                     }
-#                   ]
-#                 }
-#               ]
-#             }
-        - slack/notify:
-            custom: |
-                {
-                  "blocks": [
-                    {
-                      "type": "section",
-                      "fields": [
-                        {
+
+      - slack/notify:
+          custom: |
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "plain_text",
+                        "text": "Deployed ${CIRCLE_PROJECT_REPONAME} to << parameters.environment >>.",
+                        "emoji": true
+                      }
+                    ]
+                  },
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
                           "type": "plain_text",
-                          "text": "Deployed ${CIRCLE_PROJECT_REPONAME} to << parameters.environment >>.",
-                          "emoji": true
-                        }
-                      ]
-                    },
-                      "type": "actions",
-                      "elements": [
-                        {
-                          "type": "button",
-                          "text": {
-                            "type": "plain_text",
-                            "text": "View Job"
-                          },
-                          "url": "${CIRCLE_BUILD_URL}"
-                        }
-                      ]
-                    }
-                  ]
-                } 
+                          "text": "View Job"
+                        },
+                        "url": "${CIRCLE_BUILD_URL}"
+                      }
+                    ]
+                  }
+                ]
+              } 
                 
-          event: always                
+              
                 
                 
                 
@@ -218,7 +203,25 @@ jobs:
 #                       ]
 #                     }
 #                   ]
-#                 }            
+#                 }    
+
+
+#       - slack/notify:
+#           custom: |
+#             {
+#               "blocks": [
+#                 {
+#                   "type": "section",
+#                   "fields": [
+#                     {
+#                       "type": "plain_text",
+#                       "text": "*This is a text notification*",
+#                       "emoji": true
+#                     }
+#                   ]
+#                 }
+#               ]
+#             }
 
 
 
