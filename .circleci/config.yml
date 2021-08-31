@@ -21,7 +21,7 @@ jobs:
                     "fields": [
                       {
                         "type": "plain_text",
-                        "text": "Deployed ${CIRCLE_PROJECT_REPONAME} to << parameters.environment >>.",
+                        "text": "Deployed ${CIRCLE_PROJECT_REPONAME} to .",
                         "emoji": true
                       }
                     ]
