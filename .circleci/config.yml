@@ -7,7 +7,7 @@ jobs:
     docker:
       - image: cimg/node
     steps:
-      - run: jq --version
+      - checkout
       - slack/notify:
           template: basic_success_1
           event: always
