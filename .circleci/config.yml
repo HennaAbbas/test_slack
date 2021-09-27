@@ -14,7 +14,10 @@ jobs:
 workflows:
   send-notification:
     jobs:
-      - maven/test      
+      - maven/test:
+          command: package
+          settings_file: .circleci/settings.xml
+          
       - notify:
           context: slack-secrets
    
