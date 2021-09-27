@@ -11,9 +11,19 @@ jobs:
       - slack/notify:
           template: basic_success_1
           event: always
+          
+          
+  testing:
+    docker:
+      - image: cimg/openjdk:13.0
+    steps:
+    - checkout  
+    
+    
 workflows:
   send-notification:
     jobs:
+      - testing
       - maven/test:
           command: package
           settings_file: .circleci/settings.xml
