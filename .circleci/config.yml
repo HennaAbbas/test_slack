@@ -1,10 +1,11 @@
 version: '2.1'
 orbs:
   slack: circleci/slack@4.4.3
+  maven: circleci/maven@1.1.1
 jobs:
   notify:
     docker:
-      - image: amazon/aws-cli 
+      - image: cimg/node
     steps:
       - run: jq --version
       - slack/notify:
@@ -13,8 +14,10 @@ jobs:
 workflows:
   send-notification:
     jobs:
+      - maven/test      
       - notify:
           context: slack-secrets
+   
           
           #test
 
