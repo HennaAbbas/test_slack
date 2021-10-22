@@ -1,45 +1,19 @@
 version: '2.1'
 orbs:
-  slack: circleci/slack@4.4.3
-  maven: circleci/maven@1.2.0
+  slack: circleci/slack@4.1
 jobs:
   notify:
     docker:
-      - image: cimg/node
+      - image: 'cimg/base:stable'
     steps:
-      - checkout
       - slack/notify:
           template: basic_success_1
           event: always
-          
-          
-  testing:
-    docker:
-      - image: cimg/openjdk@sha256:8f95feac3df10c2f2ca30b32c50b2e9b6ed4ce58ab040a780ec2fc58912e1ebb
-    steps:
-      - checkout  
-    
-    
 workflows:
   send-notification:
     jobs:
-      - testing
-      - maven/test:
-          command: package
-          settings_file: .circleci/settings.xml
-          
       - notify:
           context: slack-secrets
-   
           
-          #test
-# version: 2.1
-
-# orbs:
-#   maven: circleci/maven@1.1.0
-
-# workflows:
-#   maven_test:
-#     jobs:
-      - maven/test
+         
 
