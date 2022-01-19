@@ -4,7 +4,7 @@ orbs:
 jobs:
   notify:
     docker:
-      - image: circleci/python:3.6.4
+      - image: cimg/base:2020.01
     steps:
       - slack/notify:
           template: basic_success_1
