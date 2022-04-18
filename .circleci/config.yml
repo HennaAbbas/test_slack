@@ -83,33 +83,74 @@ workflows:
         context: [slack]
         post-steps: &failure_post_steps
         - slack/notify:
-            custom: &failure_template |
+            custom: |
               {
-                "text": "",
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "⚠️ *Failure* #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}` by ${COMMIT_AUTHOR}:\n${COMMIT_MESSAGE}"
-                    }
-                  },
-                  {
-                    "type": "actions",
-                    "elements": [
-                      {
-                        "type": "button",
-                        "text": {
+                 "text": "CircleCI job failed.",
+                 "blocks": [
+                     {
+                       "type": "header",
+                       "text": {
                           "type": "plain_text",
-                          "text": "View Job"
-                        },
-                        "url": "${CIRCLE_BUILD_URL}"
-                      }
-                    ]
-                  }
-                ]
-              }
-            event: fail
+                          "text": "Job Failed. :red_circle:",
+                          "emoji": true
+                       }
+                    },
+                    {
+                       "type": "section",
+                       "fields": [{
+                          "type": "mrkdwn",
+                          "text": "*Job*: ${CIRCLE_JOB}"
+                       }]
+                    },
+                    {
+                       "type": "section",
+                       "fields": [{
+                             "type": "mrkdwn",
+                             "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                          },
+                          {
+                             "type": "mrkdwn",
+                             "text": "*Branch*: $CIRCLE_BRANCH"
+                          },
+                          {
+                             "type": "mrkdwn",
+                             "text": "*Commit*: $CIRCLE_SHA1"
+                          }
+                       ],
+                       "accessory": {
+                          "type": "image",
+                          "image_url": "https://assets.brandfolder.com/otz5mn-bw4j2w-6jzqo8/original/circle-logo-badge-black.png",
+                          "alt_text": "CircleCI logo"
+                       }
+                    },
+                        {
+                            "type": "actions",
+                            "elements": [{
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "View More",
+                                "emoji": true
+                            },
+                            "value":  "view_job",
+                            "url":  "$CIRCLE_BUILD_URL"
+                        },{
+                              "type": "button",
+                              "text": {
+                                "type": "plain_text",
+                                "text": "View Report",
+                                "emoji": true
+                              },
+                              "value": "view_job",
+                              "url": "$ARTIFACT_URL"
+                            }
+
+                        ]
+                    }
+
+                 ]
+              }    
+        event: always              
     - test:
         context: SLACK_SECRETS
         post-steps: *failure_post_steps
