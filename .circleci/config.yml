@@ -66,7 +66,7 @@ jobs:
                               "emoji": true
                             },
                             "value": "view_job",
-                            "url": "$ARTIFACT_URL"
+                            "url": "https://circleci.com/gh/HennaAbbas/test_slack/363"
                           }
 
                       ]
