@@ -30,7 +30,7 @@ jobs:
               ]
             }
           event: fail     
-          mentions: ${ME}
+          mentions: "${ME}"
  
 workflows:
   my_workflow:
