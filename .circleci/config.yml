@@ -11,6 +11,7 @@ jobs:
 
       - run: echo $SLACK_DEFAULT_CHANNEL
       - hello-world/hello
+      - run: wqr
       - slack/notify:
           custom: |
             {
