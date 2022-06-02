@@ -6,7 +6,7 @@ orbs:
 jobs:
   my_job:
     docker:
-      - image: circleci/node
+      - image: cimg/node
     steps:
 
       - run: echo $SLACK_DEFAULT_CHANNEL
