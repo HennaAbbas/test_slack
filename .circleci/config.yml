@@ -13,35 +13,24 @@ jobs:
       - hello-world/hello
 
       - slack/notify:
+      - slack/notify:
           custom: |
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "plain_text",
-                        "text": "Deployed ${CIRCLE_PROJECT_REPONAME} to .",
-                        "emoji": true
-                      }
-                    ]
-                  },
-                    "type": "actions",
-                    "elements": [
-                      {
-                        "type": "button",
-                        "text": {
-                          "type": "plain_text",
-                          "text": "View Job"
-                        },
-                        "url": "${CIRCLE_BUILD_URL}"
-                      }
-                    ]
-                  }
-                ]
-              } 
-              event: fail
-              mentions: @${ME}
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: fail     
+          mentions: @${ME}
  
 workflows:
   my_workflow:
