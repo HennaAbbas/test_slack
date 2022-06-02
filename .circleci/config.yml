@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-    slack: circleci/slack@4.4.4
+    slack: circleci/slack@4.10.1
     hello-world: tsub/hello-world@0.0.8
    
 jobs:
@@ -30,7 +30,7 @@ jobs:
               ]
             }
           event: fail     
-          mentions: @${ME}
+          mentions: ${ME}
  
 workflows:
   my_workflow:
