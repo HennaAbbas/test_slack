@@ -2,12 +2,17 @@ version: 2.1
 orbs:
     slack: circleci/slack@4.10.1
     hello-world: tsub/hello-world@0.0.8
+    hugo: circleci/hugo@1.3.0
    
 jobs:
   my_job:
     docker:
       - image: 'cimg/base:stable'
     steps:
+      - hugo/build:
+          html-proofer: true
+          source: src/
+          version: '0.55    
 
       - run: echo $SLACK_DEFAULT_CHANNEL
       - hello-world/hello
