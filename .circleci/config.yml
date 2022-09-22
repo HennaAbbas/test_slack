@@ -120,45 +120,14 @@ jobs:
 workflows:
   main:
     jobs:
-      - build-master:
-          filters:
-            branches:
-              only:
-                - master
+      - build-master
       - deploy-master:
-          filters:
-            branches:
-              only:
-                - master
           requires:
             - build-master
-
-      - build-dev:
-          filters:
-            branches:
-              only:
-                - dev
-
-      - deploy-dev:
-          filters:
-            branches:
-              only:
-                - dev
-          requires:
-            - build-dev
-
-      - build-apiweb:
-          filters:
-            branches:
-              only:
-                - apiweb
-                - redesign-oct2020
+      - build-dev
+      - deploy-dev
+      - build-apiweb
       - deploy-apiweb:
-          filters:
-            branches:
-              only:
-                - apiweb
-                - redesign-oct2020
           requires:
             - build-apiweb
 
