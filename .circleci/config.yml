@@ -1,51 +1,182 @@
 version: 2.1
 orbs:
-    slack: circleci/slack@4.10.1
-    hello-world: tsub/hello-world@0.0.8
-    hugo: circleci/hugo@1.3.0
-   
+  hugo: circleci/hugo@1.3.0
+  aws-s3: circleci/aws-s3@1.0.15
+  node: circleci/node@5.0.2
+
 jobs:
-  my_job:
+  build-master:
     docker:
-      - image: 'cimg/base:stable'
+      - image: 'cimg/node:16.13.0'
+    executor:
+      name: hugo/default
     steps:
+      - checkout
+      - hugo/install:
+          version: '0.98.0'
+      - node/install-packages
+      - move-static-js-files
+      - hugo/hugo-build:
+          extra-flags: --config config-s3-production.toml
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - public
 
+  build-dev:
+    docker:
+      - image: 'cimg/node:16.13.0'
+    executor:
+      name: hugo/default
+    steps:
+      - checkout
+      - hugo/install:
+          version: '0.98.0'
+      - node/install-packages
+      - move-static-js-files
+      - hugo/hugo-build:
+          extra-flags: --config config-s3-dev.toml
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - public
 
-      - run: echo $SLACK_DEFAULT_CHANNEL
-      - hello-world/hello
-      - run: wqr
-      - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: fail     
-          mentions: "${ME}"
-          channel: D0103C2T413
- 
+  build-apiweb:
+    docker:
+      - image: 'cimg/node:16.13.0'
+    executor:
+      name: hugo/default
+    steps:
+      - checkout
+      - hugo/install:
+          version: '0.98.0'
+      - node/install-packages
+      - move-static-js-files
+      - hugo/hugo-build:
+          extra-flags: --config config-s3-dev.toml
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - public
+
+  deploy-master:
+    docker:
+      - image: 'cimg/python:3.6'
+    steps:
+      - checkout
+      - attach_workspace:
+          at: built
+      - fix-market-keyword-pages
+      - aws-s3/sync:
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          from: built/public
+          overwrite: true
+          to: 's3://static.dolly.com/'
+      - run:
+          name: "Invalidate CloudFront Cache"
+          command: |
+            aws configure set preview.cloudfront true
+            aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_ID_STATIC --paths '/*'
+
+  deploy-dev:
+    docker:
+      - image: 'cimg/python:3.6'
+    steps:
+      - checkout
+      - attach_workspace:
+          at: built
+      - fix-market-keyword-pages
+      - aws-s3/sync:
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          from: built/public
+          overwrite: true
+          to: 's3://static-dev.dolly.com/'
+      - run:
+          name: "Invalidate CloudFront Cache"
+          command: |
+            aws configure set preview.cloudfront true
+            aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_ID_STATIC_DEV --paths '/*'
+
+  deploy-apiweb:
+    docker:
+      - image: 'cimg/python:3.6'
+    steps:
+      - checkout
+      - attach_workspace:
+          at: built
+      - fix-market-keyword-pages
+      - aws-s3/sync:
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          from: built/public
+          overwrite: true
+          to: 's3://api-web.dolly.com/'
+
 workflows:
-  my_workflow:
+  main:
     jobs:
-      - my_job:  
-          context:
-            - SLACK_SECRETS
-      - hugo/build:
-          html-proofer: true
-          source: src/
-          version: '0.55'               
+      - build-master:
+          filters:
+            branches:
+              only:
+                - master
+      - deploy-master:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - build-master
 
-              
+      - build-dev:
+          filters:
+            branches:
+              only:
+                - dev
 
-              #test
+      - deploy-dev:
+          filters:
+            branches:
+              only:
+                - dev
+          requires:
+            - build-dev
+
+      - build-apiweb:
+          filters:
+            branches:
+              only:
+                - apiweb
+                - redesign-oct2020
+      - deploy-apiweb:
+          filters:
+            branches:
+              only:
+                - apiweb
+                - redesign-oct2020
+          requires:
+            - build-apiweb
+
+commands:
+  create-market-keyword-pages:
+    description: "Create market-keyword pages from market and keyword text files -- Not viable with hugo orb"
+    steps:
+      - run: ./market_keyword_page_create.sh
+  fix-market-keyword-pages:
+    description: "Fix hyphenation of market-keyword pages; copies contents of single dash filenames to double dash filenames"
+    steps:
+      - run: ./fix-market-keyword-pages.sh ./built/public
+  install-pip:
+    description: "Install pip for aws"
+    steps:
+      - run: apk add --update python python-dev py-pip build-base
+  move-static-js-files:
+    description: "Copy node_modules JS into assets"
+    steps:
+      - run: make build-js
 
