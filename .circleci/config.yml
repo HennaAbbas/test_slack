@@ -9,10 +9,7 @@ jobs:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - hugo/build:
-          html-proofer: true
-          source: src/
-          version: '0.55'   
+
 
       - run: echo $SLACK_DEFAULT_CHANNEL
       - hello-world/hello
@@ -43,6 +40,10 @@ workflows:
       - my_job:  
           context:
             - SLACK_SECRETS
+      - hugo/build:
+          html-proofer: true
+          source: src/
+          version: '0.55'               
 
               
 
