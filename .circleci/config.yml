@@ -106,7 +106,6 @@ send-pass-notification: &slack-notify-success
         ]
       }
     event: pass
-    debug: true
 
 orbs:
   slack: circleci/slack@4.3.1
