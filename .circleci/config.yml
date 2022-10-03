@@ -32,7 +32,7 @@ jobs:
             }
           event: fail     
           mentions: "${ME}"
-          debug: true
+     
  
 workflows:
   my_workflow:
