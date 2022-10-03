@@ -32,7 +32,7 @@ jobs:
             }
           event: fail     
           mentions: "${ME}"
-          channel: D0103C2T413
+          debug: true
  
 workflows:
   my_workflow:
