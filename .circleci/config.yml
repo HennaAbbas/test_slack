@@ -188,7 +188,9 @@ workflows:
   send-notification:
     jobs:
       - notify:
-          context: SLACK_SECRETS
+          context: 
+            - SLACK_SECRETS
+              SLACK_SECRETS
           
          
 
