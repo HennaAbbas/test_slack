@@ -116,7 +116,8 @@ jobs:
     steps:
       - <<: *slack-notify-failure
       - <<: *slack-notify-success    
-      - run : echo 'export MY_TEMPLATE=$(cat .circleci/slack/template.json)' >> $BASH_ENV
+      - run : pwd
+      - run : echo 'export MY_TEMPLATE=$(cat /slack/my_template.json)' >> $BASH_ENV
       - run : echo $MY_TEMPLATE
       - slack/notify:
           event: always 
