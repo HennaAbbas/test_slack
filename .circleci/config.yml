@@ -190,7 +190,7 @@ workflows:
       - notify:
           context: 
             - SLACK_SECRETS
-              SLACK_SECRETS
+
           
          
 
