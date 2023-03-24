@@ -119,7 +119,7 @@ jobs:
       - run : echo 'export MY_TEMPLATE=(cat .circleci/slack/template.json)' >> "$BASH_ENV"
       - slack/notify:
           event: always 
-          template: MY_TEMPLATE
+#           template: MY_TEMPLATE
           
           
           
