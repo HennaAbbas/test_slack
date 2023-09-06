@@ -1,56 +1,6 @@
 version: '2.1'
 slack-fail-post-step: &slack-notify-failure
   slack/notify:
-    custom: |
-      {
-        "blocks": [
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "UM Login Mobile Test on ${PLATFORM} ❌ *Failure* \n Repo: ${CIRCLE_PROJECT_REPONAME} \nBuild Number: #${CIRCLE_BUILD_NUM}\n Branch: ${CIRCLE_BRANCH}\nby ${CIRCLE_USERNAME}"
-              }
-            },
-            {
-              "type": "actions",
-              "elements": [
-                {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "View Job"
-                  },
-                  "style": "primary",
-                  "value": "click_me_123",
-                  "url": "${CIRCLE_BUILD_URL}"
-                },
-                {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "View Result"
-                  },
-                  "style": "primary",
-                  "value": "click_me_123",
-                  "url": "http://um-login-cucumber-report-${PLATFORM}-${ENVIRONMENT}.s3-website-ap-southeast-1.amazonaws.com"
-                },
-                {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "View on Browserstack"
-                  },
-                  "style": "primary",
-                  "value": "click_me_123",
-                  "url": "${PUBLIC_URL_TO_BROWSERSTACK}"
-                }
-              ]
-            }
-        ]
-      }
     event: fail
 
 send-pass-notification: &slack-notify-success
