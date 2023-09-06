@@ -15,11 +15,11 @@ jobs:
       xcode: 14.1.0
     resource_class: macos.m1.medium.gen1
     steps:
-      - <<: *slack-notify-failure
-      - <<: *slack-notify-success    
-      - run : pwd
-      - run : echo 'export MY_TEMPLATE=$(cat /slack/my_template.json)' >> $BASH_ENV
-      - run : echo $MY_TEMPLATE
+      - run: echo "hello world" 
+ 
+      # - run : pwd
+      # - run : echo 'export MY_TEMPLATE=$(cat /slack/my_template.json)' >> $BASH_ENV
+      # - run : echo $MY_TEMPLATE
       - slack/notify:
           event: always 
 
