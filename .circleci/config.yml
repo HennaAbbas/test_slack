@@ -5,64 +5,15 @@ slack-fail-post-step: &slack-notify-failure
 
 send-pass-notification: &slack-notify-success
   slack/notify:
-    custom: |
-      {
-        "blocks": [
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "UM Login Mobile Test on ${PLATFORM} ✅ *Success* \n Repo: ${CIRCLE_PROJECT_REPONAME} \nBuild Number: #${CIRCLE_BUILD_NUM}\n Branch: ${CIRCLE_BRANCH}\nby ${CIRCLE_USERNAME}"
-              }
-            },
-            {
-              "type": "actions",
-              "elements": [
-                 {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "View Job"
-                  },
-                  "style": "primary",
-                  "value": "click_me_123",
-                  "url": "${CIRCLE_BUILD_URL}"
-                },
-                {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "View Result"
-                  },
-                  "style": "primary",
-                  "value": "click_me_123",
-                  "url": "http://um-login-cucumber-report-${PLATFORM}-${ENVIRONMENT}.s3-website-ap-southeast-1.amazonaws.com"
-                },
-                {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "emoji": true,
-                    "text": "View on Browserstack"
-                  },
-                  "style": "primary",
-                  "value": "click_me_123",
-                  "url": "${PUBLIC_URL_TO_BROWSERSTACK}"
-                }
-              ]
-            }
-        ]
-      }
     event: pass
 
 orbs:
   slack: circleci/slack@4.3.1
 jobs:
   notify:
-    docker:
-      - image: cimg/base:2020.01
+    macos:
+      xcode: 14.1.0
+    resource_class: macos.m1.medium.gen1
     steps:
       - <<: *slack-notify-failure
       - <<: *slack-notify-success    
@@ -71,78 +22,7 @@ jobs:
       - run : echo $MY_TEMPLATE
       - slack/notify:
           event: always 
-#           template: MY_TEMPLATE
-          
-          
-          
-          
-#           custom: |
-#             {
-#                "text": "CircleCI job failed.",
-#                "blocks": [
-#                    {
-#                      "type": "header",
-#                      "text": {
-#                         "type": "plain_text",
-#                         "text": "Job Failed. :red_circle:",
-#                         "emoji": true
-#                      }
-#                   },
-#                   {
-#                      "type": "section",
-#                      "fields": [{
-#                         "type": "mrkdwn",
-#                         "text": "*Job*: ${CIRCLE_JOB}"
-#                      }]
-#                   },
-#                   {
-#                      "type": "section",
-#                      "fields": [{
-#                            "type": "mrkdwn",
-#                            "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
-#                         },
-#                         {
-#                            "type": "mrkdwn",
-#                            "text": "*Branch*: $CIRCLE_BRANCH"
-#                         },
-#                         {
-#                            "type": "mrkdwn",
-#                            "text": "*Commit*: $CIRCLE_SHA1"
-#                         }
-#                      ],
-#                      "accessory": {
-#                         "type": "image",
-#                         "image_url": "https://assets.brandfolder.com/otz5mn-bw4j2w-6jzqo8/original/circle-logo-badge-black.png",
-#                         "alt_text": "CircleCI logo"
-#                      }
-#                   },
-#                       {
-#                           "type": "actions",
-#                           "elements": [{
-#                           "type": "button",
-#                           "text": {
-#                               "type": "plain_text",
-#                               "text": "View More",
-#                               "emoji": true
-#                           },
-#                           "value":  "view_job",
-#                           "url":  "$CIRCLE_BUILD_URL"
-#                       },{
-#                             "type": "button",
-#                             "text": {
-#                               "type": "plain_text",
-#                               "text": "View Report",
-#                               "emoji": true
-#                             },
-#                             "value": "view_job",
-#                             "url": "https://circleci.com/gh/HennaAbbas/test_slack/363"
-#                           }
 
-#                       ]
-#                   }
-
-#                ]
-#             }
 workflows:
   send-notification:
     jobs:
