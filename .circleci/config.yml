@@ -16,6 +16,7 @@ jobs:
     resource_class: macos.m1.medium.gen1
     steps:
       - run: echo "hello world" 
+      - run: echo << pipeline.trigger_source >>
  
       # - run : pwd
       # - run : echo 'export MY_TEMPLATE=$(cat /slack/my_template.json)' >> $BASH_ENV
