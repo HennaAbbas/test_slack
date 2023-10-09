@@ -2,7 +2,7 @@ version: '2.1'
 slack-fail-post-step: &slack-notify-failure
   slack/notify:
     event: fail
-
+#test
 send-pass-notification: &slack-notify-success
   slack/notify:
     event: pass
